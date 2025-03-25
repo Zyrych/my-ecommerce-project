@@ -1,0 +1,23 @@
+# Set the default behavior.
+* text=auto
+
+# Explicitly declare text files.
+*.js text
+*.ts text
+*.json text
+*.md text
+*.html text
+*.css text
+# Add other text file extensions as needed.
+
+# Declare binary files.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+# Add other binary file extensions as needed.
+
+# Prevent line endings conversion in node_modules
+/backend/node_modules/** -text
+/frontend/node_modules/** -text

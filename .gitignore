@@ -1,0 +1,23 @@
+# Node.js
+node_modules/
+
+# IDE/Editor specific files (optional, but good practice)
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files (optional)
+.DS_Store
+Thumbs.db
+
+# Environment variables and secrets (IMPORTANT!)
+.env
+*.pem
+# Add any other files/folders you want to exclude
+
+#Frontend
+frontend/node_modules/
+
+#Backend
+backend/node_modules

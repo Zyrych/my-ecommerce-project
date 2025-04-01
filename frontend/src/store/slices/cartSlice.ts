@@ -43,12 +43,38 @@ export const fetchCartItems = createAsyncThunk<
 > (
   'cart/fetchCartItems',
   async (_, {rejectWithValue}) => {
-      try {
-        const items = await cartService.getCartItems();
-        return items;
-      } catch (error:any) {
-        return rejectWithValue(error.message || "Failed to fetch cart items")
+    try {
+      // Call the service (keep previous explicit typing attempt for now, or remove it - focus on logging)
+      const items = await cartService.getCartItems();
+
+      // --- ADD THIS LOGGING ---
+      console.log(">>> Data received in fetchCartItems thunk:", items);
+      console.log(">>> Is data an array?", Array.isArray(items));
+      // --- END LOGGING ---
+
+      // Add a runtime check to be safe and provide a better error if it's not an array
+      if (!Array.isArray(items)) {
+         console.error(">>> fetchCartItems Error: Received data is NOT an array!", items);
+         // You might want to inspect 'items' here to see its structure if it's not an array
+         return rejectWithValue("Received invalid data format from server. Expected an array.");
       }
+
+      // If the check passes, it's safe to return (TypeScript should be okay if the check is in place)
+      return items as CartItem[]; // We can use 'as' here because we've checked it's an array
+
+    } catch (error: any) {
+      // Improved error message extraction
+      let errorMessage = "Failed to fetch cart items";
+      if (error instanceof Error) {
+          errorMessage = error.message;
+      } else if (error?.response?.data?.message) { // Check for Axios error structure
+          errorMessage = error.response.data.message;
+      } else if (typeof error === 'string') {
+          errorMessage = error;
+      }
+      console.error("fetchCartItems Error:", error); // Log the original error too
+      return rejectWithValue(errorMessage);
+    }
   }
 );
 

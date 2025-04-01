@@ -1,12 +1,10 @@
-// components/CartItem/CartItem.tsx
+// src/components/CartItem/CartItem.tsx
 import React from 'react';
-//import { useDispatch } from 'react-redux'; // NO!
-import { useAppDispatch } from '../store/store'; // YES!
+import { useAppDispatch } from '../store/store'; // Ensure using typed hook
 import { CartItem as CartItemType } from '../types/CartItem';
 import * as S from './CartItem.styles';
 import { removeItemFromCart, updateCartItemQuantity } from '../store/slices/cartSlice';
 import { Product } from '../types/Product';
-
 
 interface Props {
   item: CartItemType;
@@ -14,17 +12,26 @@ interface Props {
 }
 
 const CartItem: React.FC<Props> = ({ item, product }) => {
-  //const dispatch = useDispatch(); // NO!
-  const dispatch = useAppDispatch(); // YES!
+  const dispatch = useAppDispatch();
 
   const handleRemove = () => {
+    // --- ADD THIS LOG ---
+    console.log(`<<< CartItem: handleRemove called for productId: ${item.productId} >>>`);
     dispatch(removeItemFromCart(item.productId));
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuantity = parseInt(e.target.value, 10);
+    const newQuantityStr = e.target.value;
+    // --- ADD THIS LOG ---
+    console.log(`<<< CartItem: handleQuantityChange called for productId: ${item.productId}, new value: ${newQuantityStr} >>>`);
+    const newQuantity = parseInt(newQuantityStr, 10);
     if (!isNaN(newQuantity) && newQuantity >= 1) {
+      // --- ADD THIS LOG ---
+      console.log(`<<< CartItem: Dispatching updateCartItemQuantity - productId: ${item.productId}, quantity: ${newQuantity} >>>`);
       dispatch(updateCartItemQuantity({ productId: item.productId, quantity: newQuantity }));
+    } else {
+      // --- ADD THIS LOG (Optional, but good) ---
+      console.warn(`<<< CartItem: Invalid quantity input: ${newQuantityStr} >>>`);
     }
   };
 
@@ -43,11 +50,11 @@ const CartItem: React.FC<Props> = ({ item, product }) => {
           <input
             type="number"
             min="1"
-            value={item.quantity}
-            onChange={handleQuantityChange}
+            value={item.quantity} // Ensure this reflects Redux state if needed
+            onChange={handleQuantityChange} // Make sure this is correctly bound
           />
         </S.ItemQuantity>
-        <S.RemoveButton onClick={handleRemove}>Remove</S.RemoveButton>
+        <S.RemoveButton onClick={handleRemove}>Remove</S.RemoveButton> {/* Make sure this is correctly bound */}
       </S.ItemDetails>
     </S.CartItemContainer>
   );

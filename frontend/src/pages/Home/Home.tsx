@@ -1,20 +1,17 @@
 // pages/Home/Home.tsx
 import React, { useEffect } from 'react';
-//import { useDispatch, useSelector } from 'react-redux';  NO
-import { useAppDispatch, useAppSelector } from '../../store/store'; //YES
+//import { useDispatch, useSelector } 
+import { useAppDispatch, useAppSelector } from '../../store/store'; 
 import { fetchProducts, selectAllProducts, selectProductStatus } from '../../store/slices/productsSlice';
 import ProductCard from '../../components/ProductCard';
 import Loader from '../../components/Loader';
-import * as S from './Home.styles'; // Import styled components
+import * as S from './Home.styles'; 
 
 const Home: React.FC = () => {
-  //const dispatch = useDispatch();  NO
-  //const products = useSelector(selectAllProducts);  NO
-  //const productStatus = useSelector(selectProductStatus) NO
 
-  const dispatch = useAppDispatch(); //YES
-  const products = useAppSelector(selectAllProducts); //YES
-  const productStatus = useAppSelector(selectProductStatus); //YES
+  const dispatch = useAppDispatch(); 
+  const products = useAppSelector(selectAllProducts);
+  const productStatus = useAppSelector(selectProductStatus);
 
   useEffect(() => {
     if (productStatus === 'idle') {
